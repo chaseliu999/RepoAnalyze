@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RepoInsight AI — Settings</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 13px; color: #1f2328; background: #fff;
+      width: 360px; padding: 16px;
+    }
+    h1 { font-size: 15px; font-weight: 600; color: #0969da; }
+    .subtitle { font-size: 11px; color: #57606a; margin: 2px 0 16px; }
+
+    /* Provider tabs */
+    #provider-tabs {
+      display: flex; gap: 4px; margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .ptab {
+      padding: 5px 10px; border-radius: 20px; font-size: 12px; cursor: pointer;
+      border: 1.5px solid #d0d7de; background: #f6f8fa; color: #57606a;
+      font-weight: 500; transition: all 0.15s;
+    }
+    .ptab:hover { border-color: #0969da; color: #0969da; }
+    .ptab.active { background: #0969da; color: white; border-color: #0969da; }
+
+    .field { margin-bottom: 13px; }
+    label { display: block; font-weight: 500; margin-bottom: 4px; font-size: 12px; }
+    .hint { font-size: 10px; color: #57606a; margin-bottom: 5px; }
+    .hint a { color: #0969da; text-decoration: none; }
+    input, select {
+      width: 100%; padding: 6px 10px;
+      border: 1px solid #d0d7de; border-radius: 6px;
+      font-size: 13px; color: #1f2328; background: #f6f8fa;
+    }
+    input:focus, select:focus {
+      outline: none; border-color: #0969da; background: #fff;
+    }
+
+    .divider { border-top: 1px solid #d0d7de; margin: 13px 0; }
+
+    /* Auto-prompt toggle */
+    .toggle-row { display: flex; justify-content: space-between; align-items: center; }
+    .toggle {
+      width: 36px; height: 20px; background: #d0d7de; border-radius: 10px;
+      position: relative; cursor: pointer; transition: background 0.2s; flex-shrink: 0;
+    }
+    .toggle.on { background: #0969da; }
+    .toggle::after {
+      content: ''; position: absolute; width: 16px; height: 16px;
+      background: white; border-radius: 50%; top: 2px; left: 2px; transition: left 0.2s;
+    }
+    .toggle.on::after { left: 18px; }
+
+    .btn-save {
+      width: 100%; padding: 8px; background: #0969da; color: white;
+      border: none; border-radius: 6px; font-size: 13px; font-weight: 500;
+      cursor: pointer; margin-top: 4px;
+    }
+    .btn-save:hover { background: #0860ca; }
+    .status { text-align: center; font-size: 11px; margin-top: 8px; height: 14px; }
+    .status.ok { color: #1a7f37; }
+    .status.err { color: #cf222e; }
+
+    /* Provider info banner */
+    #provider-info {
+      background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px;
+      padding: 8px 10px; font-size: 11px; color: #57606a; margin-bottom: 13px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 RepoInsight AI</h1>
+  <div class="subtitle">Settings — choose your AI provider and enter your API key</div>
+
+  <!-- Provider selector -->
+  <div id="provider-tabs">
+    <button class="ptab active" data-p="claude">Claude</button>
+    <button class="ptab" data-p="openai">OpenAI</button>
+    <button class="ptab" data-p="gemini">Gemini</button>
+    <button class="ptab" data-p="qwen">Qwen</button>
+    <button class="ptab" data-p="deepseek">DeepSeek</button>
+  </div>
+
+  <!-- Dynamic provider info -->
+  <div id="provider-info"></div>
+
+  <!-- API Key -->
+  <div class="field">
+    <label id="key-label">API Key</label>
+    <div class="hint" id="key-hint"></div>
+    <input type="password" id="apiKey" placeholder="" autocomplete="off">
+  </div>
+
+  <!-- Model -->
+  <div class="field">
+    <label>Model</label>
+    <select id="model"></select>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- GitHub token -->
+  <div class="field">
+    <label>GitHub Token <span style="font-size:10px;color:#57606a">(optional)</span></label>
+    <div class="hint">Raises GitHub API limit from 60 → 5,000 req/hr.
+      Get one at <a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a>
+    </div>
+    <input type="password" id="githubToken" placeholder="ghp_…" autocomplete="off">
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Auto-prompt toggle -->
+  <div class="field">
+    <div class="toggle-row">
+      <div>
+        <label>Auto-prompt on GitHub repos</label>
+        <div class="hint" style="margin:0">Show banner when you open a repository page</div>
+      </div>
+      <div class="toggle on" id="autoToggle"></div>
+    </div>
+  </div>
+
+  <button class="btn-save" id="btnSave">Save Settings</button>
+  <div class="status" id="status"></div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
